@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HSK Portfolio Pro</title>
+    
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a0a">
+
     <style>
         :root { --green: #00ffa3; --red: #ff4d4d; --gold: #f3ba2f; --bg: #0a0a0a; --card: #161616; --border: #2d2d2d; --text-main: #ffffff; --text-sub: #888888; }
         body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 15px; -webkit-tap-highlight-color: transparent; }
@@ -17,38 +19,46 @@
         .value { font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
         .sub-value { font-size: 1.1rem; font-weight: 700; }
         .badge { background: var(--gold); color: #000; font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; position: absolute; top: 20px; right: 20px; text-transform: uppercase; }
+        
         .progress-container { background: #262626; height: 8px; border-radius: 10px; margin: 15px 0 8px; overflow: hidden; }
         .progress-bar { background: linear-gradient(90deg, #00ffa3, #00c853); height: 100%; width: 0%; transition: 1.5s ease-out; }
         .goal-10k-box { margin-top: 15px; padding-top: 12px; border-top: 1px solid #222; }
         .mini-bar-bg { background: #222; height: 4px; border-radius: 2px; overflow: hidden; margin: 6px 0; }
         .mini-bar-fill { background: var(--gold); height: 100%; width: 0%; transition: 2s; }
+
         #estimate-box { background: rgba(243, 186, 47, 0.05); border: 1px dashed rgba(243, 186, 47, 0.3); padding: 12px; border-radius: 18px; margin-top: 15px; text-align: center; }
         #estimate-text { color: var(--gold); font-size: 0.8rem; font-weight: 600; line-height: 1.5; }
+
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
         table { width: 100%; border-collapse: collapse; }
-        td { padding: 14px 0; border-top: 1px solid #222; }
+        td { padding: 14px 0; border-top: 1px solid #222; vertical-align: middle; }
         .btn { background: var(--green); color: #000; text-decoration: none; display: block; padding: 18px; border-radius: 22px; text-align: center; font-weight: 800; margin-top: 15px; }
     </style>
 </head>
 <body>
+
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 5px 20px;">
         <h2 style="font-size: 1.1rem; margin:0; letter-spacing: 1px;">HSK PORTFOLIO</h2>
-        <div id="status" style="font-size: 0.6rem; color: var(--text-sub); background: #222; padding: 2px 8px; border-radius: 4px;">Syncing...</div>
+        <div id="status" style="font-size: 0.6rem; color: var(--text-sub); background: #222; padding: 2px 8px; border-radius: 4px;">Đang tải...</div>
     </div>
+    
     <div class="card">
         <div id="milestoneBadge" class="badge">Next: --</div>
         <div class="label">Tổng tích lũy</div>
         <div id="totalHSK" class="value">0 HSK</div>
+        
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-top: 1px solid #222; padding-top: 15px;">
             <div><div class="label">Vốn đầu tư</div><div id="totalCost" class="sub-value">0 USDT</div></div>
             <div style="text-align: right;"><div class="label">Giá Hòa Vốn</div><div id="avgPrice" class="sub-value" style="color:var(--gold)">0.0000</div></div>
         </div>
+
         <div class="progress-container"><div id="prog" class="progress-bar"></div></div>
         <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold;">
-            <span id="percent" style="color:var(--green)">0%</span>
+            <span id="percent" style="color: var(--green);">0%</span>
             <span id="milestoneLabel" style="color: var(--text-sub);">Mục tiêu: -- HSK</span>
         </div>
+
         <div class="goal-10k-box">
             <div style="display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 800; color: var(--gold);">
                 <span>TIẾN TRÌNH 10,000 HSK</span>
@@ -56,48 +66,57 @@
             </div>
             <div class="mini-bar-bg"><div id="totalProgBar" class="mini-bar-fill"></div></div>
         </div>
-        <div id="estimate-box"><div id="estimate-text">--</div></div>
+
+        <div id="estimate-box">
+            <div id="estimate-text">--</div>
+        </div>
     </div>
+
     <div class="grid">
-        <div class="card" style="padding: 15px;"><div class="label">Giá Gate.io</div><div id="livePrice" style="color: var(--gold); font-size: 1.3rem; font-weight: 800;">--</div></div>
-        <div class="card" style="padding: 15px;"><div class="label">Lời / Lỗ</div><div id="profitUSDT" style="font-size: 1.3rem; font-weight: 800;">--</div></div>
+        <div class="card" style="padding: 15px;">
+            <div class="label">Giá Gate.io</div>
+            <div id="livePrice" style="color: var(--gold); font-size: 1.3rem; font-weight: 800;">--</div>
+        </div>
+        <div class="card" style="padding: 15px;">
+            <div class="label">Lời / Lỗ</div>
+            <div id="profitUSDT" style="font-size: 1.3rem; font-weight: 800;">--</div>
+        </div>
     </div>
-    <div class="card"><div class="label" style="margin-bottom: 10px;">Lịch sử giao dịch</div><table id="historyTable"><tbody></tbody></table></div>
-    <a href="https://forms.gle/Fdos9RohuYvvGtvC8" target="_blank" class="btn">GHI CHÉP GIAO DỊCH MỚI</a>
+
+    <div class="card">
+        <div class="label" style="margin-bottom: 10px;">Toàn bộ lịch sử giao dịch</div>
+        <table id="historyTable"><tbody></tbody></table>
+    </div>
+
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7GeWNPdL2V6jAfS8lXqTmwloI6wana9dyf0JvnZE2lj4JEw/viewform?usp=header" target="_blank" class="btn">GHI CHÉP GIAO DỊCH MỚI</a>
 </div>
 
 <script>
 const SHEET_ID = '13aMMI3eTsSfglI_4hOizVreKE_x1_mFTmierAQAkCqE';
 const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
-// Hàm làm sạch số (Xử lý cả dấu phẩy và dấu chấm thập phân)
-function parseCryptoNum(val) {
+function parseNum(val) {
     if (!val) return 0;
-    // Thay dấu phẩy thành dấu chấm để chuẩn hóa số thập phân
-    let clean = val.toString().replace(/,/g, '.');
-    // Loại bỏ tất cả ký tự không phải số hoặc dấu chấm
-    clean = clean.replace(/[^0-9.]/g, '');
-    // Xử lý trường hợp có nhiều hơn 1 dấu chấm (chỉ lấy dấu chấm đầu tiên)
-    let parts = clean.split('.');
-    if (parts.length > 2) clean = parts[0] + '.' + parts.slice(1).join('');
-    
-    return parseFloat(clean) || 0;
+    // Thay dấu phẩy thành dấu chấm để xử lý số thập phân đúng chuẩn
+    let clean = val.toString().replace(/,/g, '.').replace(/[^0-9.]/g, '');
+    let n = parseFloat(clean) || 0;
+    // Tự động sửa lỗi nếu nhập 1752 thay vì 0.1752
+    if (n > 100) n = n / 10000;
+    return n;
 }
 
 async function updateDashboard() {
     try {
-        let livePrice = 0.1756;
+        let livePrice = 0.1750;
         try {
             const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.gateio.ws/api/v4/spot/tickers?currency_pair=HSK_USDT'));
             const data = await res.json();
             livePrice = parseFloat(JSON.parse(data.contents)[0].last);
-        } catch (e) {}
+        } catch (e) { console.warn("Lỗi API Gate.io"); }
         document.getElementById('livePrice').innerText = livePrice.toFixed(4);
 
         const resSheet = await fetch(`${URL}&t=${Date.now()}`);
         const csvText = await resSheet.text();
-        
-        // Chia dòng cẩn thận hơn để tránh lỗi ô chứa dấu phẩy
         const lines = csvText.split(/\r?\n/).map(line => {
             return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(cell => cell.replace(/"/g, '').trim());
         });
@@ -111,36 +130,46 @@ async function updateDashboard() {
 
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i];
-            if (!row[qtyIdx]) continue;
+            if (!row[qtyIdx] || row[qtyIdx] === "") continue;
             
-            const qty = parseCryptoNum(row[qtyIdx]);
-            const p = parseCryptoNum(row[priceIdx]);
+            // Theo yêu cầu của bạn: lấy số tròn
+            const qty = Math.round(parseNum(row[qtyIdx])); 
+            const p = parseNum(row[priceIdx]);
 
             if (qty > 0) {
                 totalHSK += qty;
                 totalCost += (qty * p);
                 
                 const diff = p > 0 ? ((livePrice - p) / p * 100).toFixed(1) : 0;
+                const statusColor = diff >= 0 ? 'var(--green)' : 'var(--red)';
+                
                 historyHTML = `<tr>
-                    <td><div class="label">${row[timeIdx] ? row[timeIdx].split(' ')[0] : '---'}</div><b>${qty} HSK</b></td>
-                    <td style="text-align:right;"><b>${p.toFixed(4)}</b><br><span style="font-size:0.7rem; color:${diff>=0?'#00ffa3':'#ff4d4d'}">${diff>=0?'▲':'▼'} ${Math.abs(diff)}%</span></td>
+                    <td>
+                        <div class="label">${row[timeIdx] ? row[timeIdx].split(' ')[0] : '---'}</div>
+                        <b style="font-size:1.1rem;">${qty.toLocaleString()} HSK</b>
+                    </td>
+                    <td style="text-align:right;">
+                        <div class="label">Giá mua: ${p.toFixed(4)}</div>
+                        <span style="font-weight:800; color:${statusColor}">${diff >= 0 ? '▲ +' : '▼ '}${Math.abs(diff)}%</span>
+                    </td>
                 </tr>` + historyHTML;
             }
         }
 
         const avgPrice = totalHSK > 0 ? (totalCost / totalHSK) : 0;
         const profit = (totalHSK * livePrice) - totalCost;
-        const nextM = [250, 500, 1000, 2500, 5000, 10000].find(m => m > totalHSK) || 10000;
+        const milestones = [250, 500, 1000, 2500, 5000, 10000];
+        const nextM = milestones.find(m => m > totalHSK) || 10000;
 
         document.getElementById('totalHSK').innerText = totalHSK.toLocaleString() + " HSK";
-        document.getElementById('totalCost').innerText = totalCost.toLocaleString(undefined, {minimumFractionDigits: 2}) + " USDT";
+        document.getElementById('totalCost').innerText = totalCost.toLocaleString(undefined, {minimumFractionDigits: 1}) + " USDT";
         document.getElementById('avgPrice').innerText = avgPrice.toFixed(4);
         document.getElementById('milestoneBadge').innerText = "Next: " + nextM;
         document.getElementById('milestoneLabel').innerText = "Mục tiêu: " + nextM + " HSK";
         
         const pUSDT = document.getElementById('profitUSDT');
         pUSDT.innerText = (profit >= 0 ? "+" : "") + profit.toFixed(2);
-        pUSDT.style.color = profit >= 0 ? "#00ffa3" : "#ff4d4d";
+        pUSDT.style.color = profit >= 0 ? "var(--green)" : "var(--red)";
 
         document.getElementById('prog').style.width = Math.min((totalHSK/nextM)*100, 100) + "%";
         document.getElementById('percent').innerText = ((totalHSK/nextM)*100).toFixed(1) + "%";
@@ -149,12 +178,17 @@ async function updateDashboard() {
         
         const needed = 10000 - totalHSK;
         document.getElementById('estimate-text').innerHTML = needed > 0 ? 
-            `Cần thêm <b>${needed.toLocaleString()} HSK</b> (~${(needed*livePrice).toFixed(1)} USDT)` : "🎯 MỤC TIÊU 10K HOÀN TẤT!";
+            `Cần thêm <b>${needed.toLocaleString()} HSK</b> (~${(needed * livePrice).toFixed(1)} USDT) để đạt 10K` : "🚀 MỤC TIÊU 10K ĐÃ HOÀN THÀNH!";
 
         document.getElementById('historyTable').querySelector('tbody').innerHTML = historyHTML;
-        document.getElementById('status').innerText = "Vừa cập nhật";
-    } catch (e) { document.getElementById('status').innerText = "Lỗi đồng bộ!"; }
+        document.getElementById('status').innerText = "Live: OK (" + new Date().toLocaleTimeString('vi-VN') + ")";
+
+    } catch (e) { 
+        console.error(e);
+        document.getElementById('status').innerText = "Lỗi kết nối Sheet!"; 
+    }
 }
+
 updateDashboard();
 setInterval(updateDashboard, 30000);
 </script>
