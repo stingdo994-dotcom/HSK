@@ -14,14 +14,14 @@
         .value { font-size: 2.2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
         .sub-value { font-size: 1.1rem; font-weight: 700; }
         
-        /* Progress Bar Styles */
+        /* Progress Bar */
         .progress-container { background: #262626; height: 10px; border-radius: 10px; margin: 15px 0 8px; overflow: hidden; }
         .progress-bar { background: linear-gradient(90deg, #00ffa3, #00c853); height: 100%; width: 0%; transition: 1.5s ease-out; }
         .goal-10k-box { margin-top: 15px; padding-top: 12px; border-top: 1px solid #222; }
         .mini-bar-bg { background: #222; height: 6px; border-radius: 3px; overflow: hidden; margin: 8px 0; }
         .mini-bar-fill { background: var(--gold); height: 100%; width: 0%; transition: 2s; }
         
-        #chart-wrapper { width: 100%; height: 200px; margin-top: 15px; }
+        #chart-wrapper { width: 100%; height: 200px; margin: 15px 0; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
         table { width: 100%; border-collapse: collapse; }
         td { padding: 12px 0; border-top: 1px solid #222; }
@@ -32,8 +32,8 @@
 <body>
 
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 5px 20px;">
-        <h2 style="font-size: 1.1rem; margin:0; letter-spacing: 1px;">HSK PORTFOLIO</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 5px 15px;">
+        <h2 style="font-size: 1rem; margin:0; letter-spacing: 1px;">HSK PORTFOLIO</h2>
         <div id="status" style="font-size: 0.6rem; color: var(--text-sub); background: #222; padding: 2px 8px; border-radius: 4px;">Syncing...</div>
     </div>
     
@@ -41,8 +41,19 @@
         <div class="label">Tổng tích lũy</div>
         <div id="totalHSK" class="value">0 HSK</div>
 
+        <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #222; padding-top: 15px;">
+            <div>
+                <div class="label">Số vốn đã bỏ ra</div>
+                <div id="totalCost" class="sub-value" style="color: var(--text-main);">0 USDT</div>
+            </div>
+            <div style="text-align: right;">
+                <div class="label">Giá Hòa Vốn</div>
+                <div id="avgPrice" class="sub-value" style="color: var(--gold);">0.0000</div>
+            </div>
+        </div>
+
         <div class="progress-container"><div id="prog" class="progress-bar"></div></div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">
             <span id="percent" style="color:var(--green)">0%</span>
             <span id="milestoneLabel" style="color: var(--text-sub);">Mục tiêu: -- HSK</span>
         </div>
@@ -61,12 +72,12 @@
 
     <div class="grid">
         <div class="card" style="padding: 15px;">
-            <div class="label">Giá Gate.io</div>
+            <div class="label">Giá Gate.io (Vàng)</div>
             <div id="livePrice" style="color:var(--gold); font-size: 1.2rem; font-weight: 800;">--</div>
         </div>
         <div class="card" style="padding: 15px;">
-            <div class="label">Hòa Vốn</div>
-            <div id="avgPrice" style="font-size: 1.2rem; font-weight: 800;">--</div>
+            <div class="label">Lời / Lỗ</div>
+            <div id="profitUSDT" style="font-size: 1.2rem; font-weight: 800;">--</div>
         </div>
     </div>
 
@@ -96,9 +107,34 @@ function renderChart(labels, buyPrices, livePrice, volumes) {
         data: {
             labels: labels,
             datasets: [
-                { type: 'line', label: 'Giá Mua', data: buyPrices, borderColor: '#f3ba2f', borderWidth: 2, pointRadius: 2, tension: 0.3, yAxisID: 'y' },
-                { type: 'line', label: 'Giá Live', data: Array(labels.length).fill(livePrice), borderColor: '#00ffa3', borderDash: [5, 5], borderWidth: 1, pointRadius: 0, yAxisID: 'y' },
-                { type: 'bar', label: 'SL', data: volumes, backgroundColor: 'rgba(255, 255, 255, 0.08)', yAxisID: 'y1', barThickness: 12 }
+                { 
+                    type: 'line', 
+                    label: 'Giá Mua (Xanh)', 
+                    data: buyPrices, 
+                    borderColor: '#00ffa3', // Màu xanh theo yêu cầu
+                    borderWidth: 2, 
+                    pointRadius: 3, 
+                    tension: 0.3, 
+                    yAxisID: 'y' 
+                },
+                { 
+                    type: 'line', 
+                    label: 'Giá Live (Vàng)', 
+                    data: Array(labels.length).fill(livePrice), 
+                    borderColor: '#f3ba2f', // Màu vàng theo yêu cầu
+                    borderDash: [5, 5], 
+                    borderWidth: 1.5, 
+                    pointRadius: 0, 
+                    yAxisID: 'y' 
+                },
+                { 
+                    type: 'bar', 
+                    label: 'Khối lượng', 
+                    data: volumes, 
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)', 
+                    yAxisID: 'y1', 
+                    barThickness: 12 
+                }
             ]
         },
         options: {
@@ -152,11 +188,15 @@ async function updateDashboard() {
             }
         }
 
-        // Cập nhật các con số chính
         document.getElementById('totalHSK').innerText = totalHSK.toLocaleString() + " HSK";
+        document.getElementById('totalCost').innerText = totalCost.toLocaleString(undefined, {minimumFractionDigits: 1}) + " USDT";
         document.getElementById('avgPrice').innerText = (totalCost/totalHSK || 0).toFixed(4);
         
-        // Tính toán Tiến trình & Milestone
+        const profit = (totalHSK * livePrice) - totalCost;
+        const pUSDT = document.getElementById('profitUSDT');
+        pUSDT.innerText = (profit >= 0 ? "+" : "") + profit.toFixed(2);
+        pUSDT.className = profit >= 0 ? 'up' : 'down';
+
         const milestones = [500, 1000, 2500, 5000, 10000];
         const nextM = milestones.find(m => m > totalHSK) || 10000;
         
@@ -172,7 +212,7 @@ async function updateDashboard() {
 
         renderChart(labels, buyPrices, livePrice, volumes);
         document.getElementById('historyTable').querySelector('tbody').innerHTML = historyHTML;
-        document.getElementById('status').innerText = "Live: OK (" + new Date().toLocaleTimeString() + ")";
+        document.getElementById('status').innerText = "Live: OK";
     } catch (e) { document.getElementById('status').innerText = "Lỗi!"; }
 }
 updateDashboard();
