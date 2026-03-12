@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HSK Portfolio Pro</title>
+    <title>HSK Portfolio Pro Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --green: #00ffa3; --red: #ff4d4d; --gold: #f3ba2f; --bg: #0a0a0a; --card: #161616; --border: #2d2d2d; --text-main: #ffffff; --text-sub: #888888; }
-        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 15px; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 15px; }
         .container { max-width: 480px; margin: auto; }
-        .card { background: var(--card); padding: 20px; border-radius: 28px; margin-bottom: 12px; border: 1px solid var(--border); position: relative; }
-        .label { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .value { font-size: 2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
-        .sub-value { font-size: 1.1rem; font-weight: 700; }
-        .badge { background: var(--gold); color: #000; font-size: 0.65rem; font-weight: 800; padding: 4px 10px; border-radius: 20px; position: absolute; top: 20px; right: 20px; }
-        #chart-wrapper { width: 100%; height: 220px; margin-top: 15px; background: #111; border-radius: 15px; padding: 10px; box-sizing: border-box; }
+        .card { background: var(--card); padding: 20px; border-radius: 28px; margin-bottom: 12px; border: 1px solid var(--border); }
+        .label { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
+        .value { font-size: 1.8rem; font-weight: 900; margin: 5px 0 15px; }
+        #chart-container { width: 100%; height: 280px; margin-top: 10px; position: relative; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-        table { width: 100%; border-collapse: collapse; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
         td { padding: 12px 0; border-top: 1px solid #222; }
         .btn { background: var(--green); color: #000; text-decoration: none; display: block; padding: 18px; border-radius: 22px; text-align: center; font-weight: 800; margin-top: 15px; }
         .up { color: var(--green); } .down { color: var(--red); }
@@ -25,41 +23,37 @@
 <body>
 
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 5px 15px;">
-        <h2 style="font-size: 1rem; margin:0;">HSK PORTFOLIO</h2>
-        <div id="status" style="font-size: 0.6rem; color: var(--text-sub);">Syncing...</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h2 style="font-size: 1rem; margin:0; letter-spacing: 1px;">HSK ANALYTICS</h2>
+        <div id="status" style="font-size: 0.6rem; color: var(--text-sub); background: #222; padding: 2px 8px; border-radius: 4px;">Syncing...</div>
     </div>
     
     <div class="card">
-        <div id="milestoneBadge" class="badge">Next: --</div>
         <div class="label">Tổng tích lũy</div>
         <div id="totalHSK" class="value">0 HSK</div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #222; padding-top: 15px;">
-            <div><div class="label">Vốn (USDT)</div><div id="totalCost" class="sub-value">0</div></div>
-            <div style="text-align: right;"><div class="label">Hòa vốn</div><div id="avgPrice" class="sub-value" style="color:var(--gold)">0.0000</div></div>
+        <div id="chart-container">
+            <canvas id="mainChart"></canvas>
         </div>
-
-        <div id="chart-wrapper"><canvas id="hskChart"></canvas></div>
     </div>
 
     <div class="grid">
         <div class="card" style="padding: 15px;"><div class="label">Giá Gate.io</div><div id="livePrice" style="color:var(--gold); font-size: 1.2rem; font-weight: 800;">--</div></div>
-        <div class="card" style="padding: 15px;"><div class="label">Lời / Lỗ</div><div id="profitUSDT" style="font-size: 1.2rem; font-weight: 800;">--</div></div>
+        <div class="card" style="padding: 15px;"><div class="label">Giá Hòa Vốn</div><div id="avgPrice" style="font-size: 1.2rem; font-weight: 800;">--</div></div>
     </div>
 
     <div class="card">
-        <div class="label" style="margin-bottom: 10px;">Lịch sử giao dịch</div>
+        <div class="label" style="margin-bottom: 10px;">Lịch sử mua hàng</div>
         <table id="historyTable"><tbody></tbody></table>
     </div>
 
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7GeWNPdL2V6jAfS8lXqTmwloI6wana9dyf0JvnZE2lj4JEw/viewform?usp=header" target="_blank" class="btn">GHI CHÉP GIAO DỊCH MỚI</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7GeWNPdL2V6jAfS8lXqTmwloI6wana9dyf0JvnZE2lj4JEw/viewform?usp=header" target="_blank" class="btn">THÊM GIAO DỊCH</a>
 </div>
 
 <script>
 const SHEET_ID = '13aMMI3eTsSfglI_4hOizVreKE_x1_mFTmierAQAkCqE';
 const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
-let hskChart;
+let mainChart;
 
 function parseNum(val) {
     if (!val) return 0;
@@ -67,50 +61,63 @@ function parseNum(val) {
     return n > 100 ? n / 10000 : n;
 }
 
-function renderChart(dataPoints, livePrice) {
-    const ctx = document.getElementById('hskChart').getContext('2d');
-    if (hskChart) hskChart.destroy();
+function renderCombinedChart(labels, buyPrices, livePrices, volumes) {
+    const ctx = document.getElementById('mainChart').getContext('2d');
+    if (mainChart) mainChart.destroy();
 
-    hskChart = new Chart(ctx, {
-        type: 'line',
+    mainChart = new Chart(ctx, {
         data: {
-            labels: dataPoints.map(d => d.time),
-            datasets: [{
-                label: 'Giá mua',
-                data: dataPoints.map(d => d.price),
-                borderColor: '#f3ba2f',
-                backgroundColor: 'rgba(243, 186, 47, 0.2)',
-                borderWidth: 2,
-                pointRadius: dataPoints.map(d => Math.sqrt(d.qty) * 2 + 2), // Số lượng càng lớn điểm càng to
-                pointHoverRadius: 10,
-                tension: 0.2
-            }, {
-                label: 'Giá Live',
-                data: Array(dataPoints.length).fill(livePrice),
-                borderColor: '#00ffa3',
-                borderDash: [5, 5],
-                borderWidth: 1,
-                pointRadius: 0,
-                fill: false
-            }]
+            labels: labels,
+            datasets: [
+                {
+                    type: 'line',
+                    label: 'Giá Mua',
+                    data: buyPrices,
+                    borderColor: '#f3ba2f',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    tension: 0.3,
+                    yAxisID: 'y'
+                },
+                {
+                    type: 'line',
+                    label: 'Giá Live',
+                    data: livePrices,
+                    borderColor: '#00ffa3',
+                    borderWidth: 1,
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    yAxisID: 'y'
+                },
+                {
+                    type: 'bar',
+                    label: 'Khối lượng',
+                    data: volumes,
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    yAxisID: 'y1',
+                    barThickness: 15
+                }
+            ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { 
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: (ctx) => {
-                            const d = dataPoints[ctx.dataIndex];
-                            return ` Mua: ${d.price} | SL: ${d.qty} HSK`;
-                        }
-                    }
-                }
-            },
+            plugins: { legend: { display: false } },
             scales: {
-                x: { grid: { display: false }, ticks: { color: '#555', font: { size: 9 } } },
-                y: { grid: { color: '#222' }, ticks: { color: '#888', font: { size: 9 } } }
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    grid: { color: '#222' },
+                    ticks: { color: '#888', font: { size: 9 } }
+                },
+                y1: {
+                    type: 'linear',
+                    display: false, // Ẩn trục khối lượng để biểu đồ gọn hơn
+                    position: 'right',
+                    grid: { drawOnChartArea: false }
+                },
+                x: { ticks: { color: '#555', font: { size: 8 } }, grid: { display: false } }
             }
         }
     });
@@ -118,7 +125,7 @@ function renderChart(dataPoints, livePrice) {
 
 async function updateDashboard() {
     try {
-        let livePrice = 0.1756;
+        let livePrice = 0.1750;
         try {
             const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.gateio.ws/api/v4/spot/tickers?currency_pair=HSK_USDT'));
             const data = await res.json();
@@ -133,40 +140,35 @@ async function updateDashboard() {
         const qtyIdx = lines[0].findIndex(h => h.includes("Số lượng HSK mua"));
         const priceIdx = lines[0].findIndex(h => h.includes("Đơn giá (USDT/HSK)"));
         
-        let totalHSK = 0, totalCost = 0, historyHTML = '', dataPoints = [];
+        let totalHSK = 0, totalCost = 0, historyHTML = '';
+        let labels = [], buyPrices = [], volumes = [];
 
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i];
             if (!row[qtyIdx]) continue;
             const qty = Math.round(parseNum(row[qtyIdx]));
             const p = parseNum(row[priceIdx]);
-            const time = row[0] ? row[0].split(' ')[0] : i;
+            const date = row[0] ? row[0].split(' ')[0] : i;
 
             if (qty > 0) {
                 totalHSK += qty;
                 totalCost += (qty * p);
-                dataPoints.push({ time, price: p, qty });
+                labels.push(date);
+                buyPrices.push(p);
+                volumes.push(qty);
                 
                 const diff = p > 0 ? ((livePrice - p) / p * 100).toFixed(1) : 0;
-                historyHTML = `<tr><td><div class="label">${time}</div><b>${qty} HSK</b></td><td style="text-align:right;"><div class="label">Giá: ${p.toFixed(4)}</div><span class="${diff>=0?'up':'down'}">${diff>=0?'▲':'▼'} ${Math.abs(diff)}%</span></td></tr>` + historyHTML;
+                historyHTML = `<tr><td><div class="label">${date}</div><b>${qty} HSK</b></td><td style="text-align:right;"><div class="label">Entry: ${p.toFixed(4)}</div><span class="${diff>=0?'up':'down'}">${diff>=0?'▲':'▼'} ${Math.abs(diff)}%</span></td></tr>` + historyHTML;
             }
         }
 
         document.getElementById('totalHSK').innerText = totalHSK.toLocaleString() + " HSK";
-        document.getElementById('totalCost').innerText = totalCost.toLocaleString(undefined, {minimumFractionDigits: 1});
         document.getElementById('avgPrice').innerText = (totalCost/totalHSK || 0).toFixed(4);
         
-        const profit = (totalHSK * livePrice) - totalCost;
-        const pUSDT = document.getElementById('profitUSDT');
-        pUSDT.innerText = (profit >= 0 ? "+" : "") + profit.toFixed(2);
-        pUSDT.className = profit >= 0 ? 'up' : 'down';
-        
-        document.getElementById('milestoneBadge').innerText = "Next: " + ([250, 500, 1000, 2500, 5000, 10000].find(m => m > totalHSK) || 10000);
-
-        renderChart(dataPoints, livePrice);
+        renderCombinedChart(labels, buyPrices, Array(labels.length).fill(livePrice), volumes);
         document.getElementById('historyTable').querySelector('tbody').innerHTML = historyHTML;
-        document.getElementById('status').innerText = "Cập nhật: " + new Date().toLocaleTimeString();
-    } catch (e) { document.getElementById('status').innerText = "Lỗi!"; }
+        document.getElementById('status').innerText = "Live: OK";
+    } catch (e) { document.getElementById('status').innerText = "Error!"; }
 }
 updateDashboard();
 setInterval(updateDashboard, 30000);
