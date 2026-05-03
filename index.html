@@ -3,37 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HSK Portfolio Optimized</title>
+    <title>HSK Portfolio Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --green: #00ffa3; --red: #ff4d4d; --gold: #f3ba2f; --bg: #0a0a0a; --card: #161616; --border: #2d2d2d; --text-main: #ffffff; --text-sub: #888888; }
         body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 12px; }
         .container { max-width: 480px; margin: auto; }
-        .card { background: var(--card); padding: 20px; border-radius: 24px; margin-bottom: 12px; border: 1px solid var(--border); position: relative; overflow: hidden; }
+        .card { background: var(--card); padding: 20px; border-radius: 24px; margin-bottom: 12px; border: 1px solid var(--border); position: relative; }
         .label { font-size: 0.65rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        .value { font-size: 2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; }
-        .sub-value { font-size: 1.1rem; font-weight: 700; }
-        
-        .progress-container { background: #262626; height: 8px; border-radius: 10px; margin: 12px 0 6px; overflow: hidden; }
-        .progress-bar { background: linear-gradient(90deg, #00ffa3, #00c853); height: 100%; width: 0%; transition: 1.5s ease-out; }
-        .goal-10k-box { margin-top: 15px; padding-top: 12px; border-top: 1px solid #222; }
-        .mini-bar-bg { background: #222; height: 5px; border-radius: 3px; overflow: hidden; margin: 6px 0; }
-        .mini-bar-fill { background: var(--gold); height: 100%; width: 0%; transition: 2s; }
-        
-        #chart-wrapper { width: 100%; height: 210px; margin: 10px 0; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 10px 0; border-top: 1px solid #222; }
-        .btn { background: var(--green); color: #000; text-decoration: none; display: block; padding: 16px; border-radius: 20px; text-align: center; font-weight: 800; margin-top: 15px; }
+        .value { font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; }
+        .sub-value { font-size: 1rem; font-weight: 700; }
+        .progress-container { background: #222; height: 8px; border-radius: 10px; margin: 12px 0; overflow: hidden; }
+        .progress-bar { background: linear-gradient(90deg, var(--green), #00c853); height: 100%; width: 0%; transition: 1s; }
+        #chart-wrapper { width: 100%; height: 200px; margin: 10px 0; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        td { padding: 10px 0; border-top: 1px solid #222; font-size: 0.9rem; }
+        .btn { background: var(--green); color: #000; text-decoration: none; display: block; padding: 16px; border-radius: 18px; text-align: center; font-weight: 800; margin-top: 15px; }
         .up { color: var(--green); } .down { color: var(--red); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <h2 style="font-size: 0.9rem; margin:0; letter-spacing: 1px;">HSK TRACKER</h2>
-        <div id="status" style="font-size: 0.6rem; color: var(--text-sub); background: #222; padding: 2px 8px; border-radius: 4px;">Đang đồng bộ...</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h2 style="font-size: 0.9rem; margin:0;">HSK TRACKER</h2>
+        <div id="status" style="font-size: 0.6rem; color: var(--gold);">Đang kết nối...</div>
     </div>
     
     <div class="card">
@@ -42,35 +37,101 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #222; padding-top: 12px;">
             <div><div class="label">Vốn đầu tư</div><div id="totalCost" class="sub-value">0 USDT</div></div>
-            <div style="text-align: right;"><div class="label">Giá Hòa Vốn</div><div id="avgPrice" class="sub-value" style="color: var(--gold);">0.0000</div></div>
+            <div style="text-align: right;"><div class="label">Hòa Vốn</div><div id="avgPrice" class="sub-value" style="color: var(--gold);">0.0000</div></div>
         </div>
 
         <div class="progress-container"><div id="prog" class="progress-bar"></div></div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: bold;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.7rem;">
             <span id="percent" style="color:var(--green)">0%</span>
-            <span id="milestoneLabel" style="color: var(--text-sub);">Mục tiêu: --</span>
+            <span id="milestoneLabel" style="color: var(--text-sub);">Mục tiêu: 10,000 HSK</span>
         </div>
 
         <div id="chart-wrapper"><canvas id="mainChart"></canvas></div>
-
-        <div class="goal-10k-box">
-            <div style="display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 800; color: var(--gold);">
-                <span>TIẾN TRÌNH 10,000 HSK</span>
-                <span id="totalPercent">0%</span>
-            </div>
-            <div class="mini-bar-bg"><div id="totalProgBar" class="mini-bar-fill"></div></div>
-            <div id="neededText" style="font-size: 0.6rem; color: var(--text-sub); text-align: center;">--</div>
-        </div>
     </div>
 
     <div class="grid">
-        <div class="card" style="padding: 12px;"><div class="label">Giá Gate.io (Vàng)</div><div id="livePrice" style="color:var(--gold); font-size: 1.1rem; font-weight: 800;">--</div></div>
-        <div class="card" style="padding: 12px;"><div class="label">Lời / Lỗ</div><div id="profitUSDT" style="font-size: 1.1rem; font-weight: 800;">--</div></div>
+        <div class="card"><div class="label">Giá Gate.io</div><div id="livePrice" style="color:var(--gold); font-size: 1.1rem; font-weight: 800;">--</div></div>
+        <div class="card"><div class="label">Lời / Lỗ</div><div id="profitUSDT" style="font-size: 1.1rem; font-weight: 800;">--</div></div>
     </div>
 
     <div class="card">
-        <div class="label" style="margin-bottom: 8px;">Lịch sử chi tiết</div>
+        <div class="label">Lịch sử giao dịch</div>
         <table id="historyTable"><tbody></tbody></table>
     </div>
 
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7GeWNPdL2V6jAfS8lXqTmwloI6wana9dyf0JvnZE2lj4JEw/viewform?usp=header" target="_blank" class
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSc7GeWNPdL2V6jAfS8lXqTmwloI6wana9dyf0JvnZE2lj4JEw/viewform" target="_blank" class="btn">THÊM GIAO DỊCH</a>
+</div>
+
+<script>
+const SHEET_ID = '13aMMI3eTsSfglI_4hOizVreKE_x1_mFTmierAQAkCqE';
+// Sử dụng đường dẫn pubhtml thay vì gviz để tránh lỗi CORS một số trình duyệt
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+
+let mainChart;
+
+function fixNum(val) {
+    if (!val) return 0;
+    let s = val.toString().replace(/,/g, '.').replace(/[^0-9.]/g, '');
+    let n = parseFloat(s) || 0;
+    return n > 100 ? n / 10000 : n;
+}
+
+function renderChart(labels, buyPrices, livePrice, volumes) {
+    const ctx = document.getElementById('mainChart').getContext('2d');
+    if (mainChart) mainChart.destroy();
+    mainChart = new Chart(ctx, {
+        data: {
+            labels: labels,
+            datasets: [
+                { type: 'line', data: buyPrices, borderColor: '#00ffa3', borderWidth: 2, pointRadius: 3, tension: 0.3 },
+                { type: 'line', data: Array(labels.length).fill(livePrice), borderColor: '#f3ba2f', borderDash: [5, 5], borderWidth: 1.5, pointRadius: 0 },
+                { type: 'bar', data: volumes, backgroundColor: 'rgba(255, 255, 255, 0.1)', yAxisID: 'yVolume' }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { color: '#222' }, ticks: { color: '#555', font: { size: 9 } } },
+                yVolume: { display: false, position: 'right' },
+                x: { ticks: { display: false } }
+            }
+        }
+    });
+}
+
+async function sync() {
+    try {
+        // 1. Lấy giá Live
+        let live = 0.1750;
+        try {
+            const r = await fetch('https://api.gateio.ws/api/v4/spot/tickers?currency_pair=HSK_USDT');
+            const d = await r.json();
+            live = parseFloat(d[0].last);
+        } catch(e) { 
+            // Nếu API trực tiếp bị chặn CORS, dùng proxy
+            const r = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.gateio.ws/api/v4/spot/tickers?currency_pair=HSK_USDT'));
+            const d = await r.json();
+            live = parseFloat(JSON.parse(d.contents)[0].last);
+        }
+        document.getElementById('livePrice').innerText = live.toFixed(4);
+
+        // 2. Lấy dữ liệu Sheet
+        const res = await fetch(CSV_URL + `&cache=${Date.now()}`);
+        const data = await res.text();
+        const rows = data.split('\n').map(row => row.split(','));
+
+        // Giả định cột: A=Thời gian, B=SL HSK, C=Đơn giá
+        let tQty = 0, tCost = 0, html = '', cL = [], cB = [], cV = [];
+
+        for (let i = 1; i < rows.length; i++) {
+            let r = rows[i];
+            if (r.length < 3 || !r[1]) continue;
+            
+            let q = Math.round(fixNum(r[1]));
+            let p = fixNum(r[2]);
+            let d = r[0].split(' ')[0].replace(/"/g,'');
+
+            if (q > 0) {
+                tQty += q;
+                tCost += (
